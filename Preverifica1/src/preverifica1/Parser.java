@@ -21,9 +21,9 @@ public class Parser {
         Document document;
         Element root, element;
         NodeList nodelist;
-        String docente="";
-        boolean coincide=false;
-        
+        boolean coincide = false;
+        String[] datiDocente = null;
+
         // creazione dell’albero DOM dal documento XML
         factory = DocumentBuilderFactory.newInstance();
         builder = factory.newDocumentBuilder();
@@ -34,21 +34,14 @@ public class Parser {
         if (nodelist != null && nodelist.getLength() > 0) {
             for (int i = 0; i < nodelist.getLength(); i++) {
                 element = (Element) nodelist.item(i);
-                NodeList td = element.getElementsByTagName("td");
-                for (int j = 0; j < td.getLength(); j++) {
-                    element = (Element) td.item(j);
-                    if (element != null && element.getFirstChild() != null) {
-                        docente += GetContent(element)+ " ";
-                        if (GetContent(element).equals(giorno)) {
-                            coincide=true;
-                        }
+                datiDocente = getTextValue(element, "td");
+                try {
+                    Docente docente = new Docente(datiDocente[1], datiDocente[2], datiDocente[3]);
+                    if (datiDocente[2].equals(giorno)) {
+                        docenti.add(docente);
                     }
+                } catch (Exception ex) {
                 }
-                if (coincide==true){
-                    System.out.println(docente);
-                }
-                docente="";
-                coincide=false;
             }
         }
         return docenti;
@@ -58,43 +51,20 @@ public class Parser {
         return element.getFirstChild().getNodeValue();
     }
 
-    private Docente GetDocente(Element element) {
-        Docente docente = null;
-        String cognome = element.getAttribute("td");
-        String giornoRicevimento = getTextValue(element, "titolo");
-        String oraRicevimento = getTextValue(element, "autore");
-        String note = getTextValue(element, "autore");
-        docente = new Docente(cognome, giornoRicevimento, oraRicevimento, note);
-        return docente;
-    }
-
     // restituisce il valore testuale dell’elemento figlio specificato
-    private String getTextValue(Element element, String tag) {
-        String tmp = "";
-        NodeList nodelist;
-        nodelist = element.getElementsByTagName(tag);
-
-        if (nodelist != null && nodelist.getLength() > 0) {
-            docenti.add(element);
-
-            for (int i = 0; i < nodelist.getLength(); i++) {
-                element = (Element) nodelist.item(i);
-                if (element != null && element.getFirstChild() != null) {
-                    tmp += element.getFirstChild().getNodeValue() + " ";
+    private String[] getTextValue(Element element, String tag) {
+        NodeList td = element.getElementsByTagName("td");
+        String[] datiDocente = new String[td.getLength()];
+        for (int j = 0; j < td.getLength(); j++) {
+            element = (Element) td.item(j);
+            if (element != null && element.getFirstChild() != null) {
+                String dati = GetContent(element);
+                if (!dati.equals(null)) {
+                    datiDocente[j] = dati;
                 }
             }
         }
-        return tmp;
+        return datiDocente;
     }
-
-// restituisce il valore intero dell’elemento figlio specificato
-    private int getIntValue(Element element, String tag) {
-        return Integer.parseInt(getTextValue(element, tag));
-    }
-
-    // restituisce il valore numerico dell’elemento figlio specificato
-    private float getFloatValue(Element element, String tag) {
-        return Float.parseFloat(getTextValue(element, tag));
-    }
-
+            
 }

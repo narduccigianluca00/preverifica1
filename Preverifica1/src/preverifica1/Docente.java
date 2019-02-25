@@ -5,28 +5,24 @@ public class Docente {
     private String cognome;
     private String giornoRicevimento;
     private String oraRicevimento;
-    private String note;
     
     public Docente() {
         cognome="";
         giornoRicevimento="";
         oraRicevimento="";
-        note="";
         
     }
 
-    public Docente(String cognome, String giornoRicevimento, String oraRicevimento,String note) {
+    public Docente(String cognome, String giornoRicevimento, String oraRicevimento ) {
         this.cognome=cognome;
         this.giornoRicevimento=giornoRicevimento;
         this.oraRicevimento=oraRicevimento;
-        this.note=note;
     }
 
     public Docente(Docente docente) {
         this.cognome = docente.cognome;
         this.giornoRicevimento = docente.giornoRicevimento;
         this.oraRicevimento = docente.oraRicevimento;
-        this.note = docente.note;
     }
 
     public String getNome() {
@@ -53,17 +49,10 @@ public class Docente {
         this.oraRicevimento = oraRicevimento;
     }
     
-    public String getNote() {
-        return note;
-    }
-
-    public void setNote(String note) {
-        this.note = note;
-    }
 
     @Override
     public String toString() {
-        return "Docente{" + "cognome=" + cognome + ", giornoRicevimento=" + giornoRicevimento + ", oraRicevimento=" + oraRicevimento + ", note=" + note + '}';
+        return "Docente{" + "cognome=" + cognome + ", giornoRicevimento=" + giornoRicevimento + ", oraRicevimento=" + oraRicevimento + '}';
     }
 
 
