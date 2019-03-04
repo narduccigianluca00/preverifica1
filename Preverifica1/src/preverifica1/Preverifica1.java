@@ -28,14 +28,32 @@ public class Preverifica1 {
         List docenti = null;
         Parser dom = new Parser();
         String giorno;
+        String docente;
         InputStreamReader input= new InputStreamReader(System.in);
         BufferedReader tastiera = new BufferedReader(input);
+        int scelta;
         
         
         try {
-            System.out.println("INSERIRE IL GIORNO");
-            giorno=tastiera.readLine();
-            docenti = dom.parseDocument("RicevimentoDocenti.xml",giorno);
+            System.out.println("Selezionare il tipo di ricerca:");
+            System.out.println("1)Ricerca per giorno");
+            System.out.println("2)Ricerca per docente");
+            scelta=Integer.parseInt(tastiera.readLine());
+            switch(scelta){
+                case 1:
+                    System.out.println("INSERIRE IL GIORNO");
+                    giorno=tastiera.readLine();
+                    docenti = dom.parseDocumentGiorno("RicevimentoDocenti.xml",giorno);
+                    break;
+                case 2:
+                    System.out.println("INSERIRE IL DOCENTE");
+                    docente= tastiera.readLine();
+                    docenti = dom.parseDocumentDocente("RicevimentoDocenti.xml",docente);
+                    break;
+                default:
+                    System.out.println("Inserimento non riconosciuto");
+                    break;
+            }
         } catch (ParserConfigurationException | SAXException | IOException exception) {
             System.out.println("Errore!");
         }

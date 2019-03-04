@@ -14,7 +14,7 @@ public class Parser {
         docenti = new ArrayList();
     }
 
-    public List parseDocument(String filename, String giorno)
+    public List parseDocumentGiorno(String filename, String giorno)
             throws ParserConfigurationException, SAXException, IOException {
         DocumentBuilderFactory factory;
         DocumentBuilder builder;
@@ -38,6 +38,39 @@ public class Parser {
                 try {
                     Docente docente = new Docente(datiDocente[1], datiDocente[2], datiDocente[3]);
                     if (datiDocente[2].equals(giorno)) {
+                        docenti.add(docente);
+                    }
+                } catch (Exception ex) {
+                }
+            }
+        }
+        return docenti;
+    }
+    
+    public List parseDocumentDocente(String filename, String docenteScelto)
+            throws ParserConfigurationException, SAXException, IOException {
+        DocumentBuilderFactory factory;
+        DocumentBuilder builder;
+        Document document;
+        Element root, element;
+        NodeList nodelist;
+        boolean coincide = false;
+        String[] datiDocente = null;
+
+        // creazione dell’albero DOM dal documento XML
+        factory = DocumentBuilderFactory.newInstance();
+        builder = factory.newDocumentBuilder();
+        document = builder.parse(filename);
+        root = document.getDocumentElement();
+        // generazione della lista degli elementi "link"
+        nodelist = root.getElementsByTagName("tr");
+        if (nodelist != null && nodelist.getLength() > 0) {
+            for (int i = 0; i < nodelist.getLength(); i++) {
+                element = (Element) nodelist.item(i);
+                datiDocente = getTextValue(element, "td");
+                try {
+                    Docente docente = new Docente(datiDocente[1], datiDocente[2], datiDocente[3]);
+                    if (datiDocente[1].toLowerCase().contains(docenteScelto)) {
                         docenti.add(docente);
                     }
                 } catch (Exception ex) {
